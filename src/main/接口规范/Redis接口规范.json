@@ -1,0 +1,11 @@
+{
+  "dataLevel": "ODS数据层级",
+  "database": "数据库名",
+  "tableName": "表名",
+  "dataStructure": {
+    "id": "int",
+    "username": "string",
+    "phonenon": "string"
+  }
+
+}
