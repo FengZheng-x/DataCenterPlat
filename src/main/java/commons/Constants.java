@@ -32,4 +32,5 @@ public class Constants {
     public final static int HDFS_PORT = 9000; // Hive服务端口号
     public final static String HDFS_URL = "hdfs://" + HADOOP_MASTER_HOST
             + ":" + HDFS_PORT;
+    public final static String HDFS_LOG_FILE = "src/main/logs/hdfs_log";
 }

@@ -1,0 +1,4 @@
+2022/08/09 18:07:17 [INFO] mkdir: hadoop fs -mkdir /test/test
+2022/08/09 18:07:17 [WARNING] mkdir: Path /test/test already exits
+2022/08/09 18:10:44 [INFO] mkdir: hadoop fs -mkdir /test/test
+2022/08/09 18:10:44 [WARNING] mkdir: Path /test/test already exits
