@@ -1,0 +1,3 @@
+test
+hadoop
+hello world
