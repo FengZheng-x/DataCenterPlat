@@ -13,7 +13,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class HDFSUtils {
     private final URI hdfsPath;
