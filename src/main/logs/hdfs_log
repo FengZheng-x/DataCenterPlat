@@ -1,4 +1,201 @@
-2022/08/09 18:07:17 [INFO] mkdir: hadoop fs -mkdir /test/test
-2022/08/09 18:07:17 [WARNING] mkdir: Path /test/test already exits
-2022/08/09 18:10:44 [INFO] mkdir: hadoop fs -mkdir /test/test
-2022/08/09 18:10:44 [WARNING] mkdir: Path /test/test already exits
+2022/08/09 18:07:17 [INFO] utils.HDFSUtils.mkdir: "hadoop fs -mkdir /test/test"
+2022/08/09 18:07:17 [WARNING] utils.HDFSUtils.mkdir: Path /test/test already exits
+2022/08/09 18:10:44 [INFO] utils.HDFSUtils.mkdir: "hadoop fs -mkdir /test/test"
+2022/08/09 18:10:44 [WARNING] utils.HDFSUtils.mkdir: Path /test/test already exits
+2022/08/10 13:31:34 [INFO] utils.HDFSUtils.cat: "hadoop fs -cat /test/data.txt"
+2022/08/10 13:34:44 [SEVERE] utils.HDFSUtils.cat: Could not obtain block: BP-897045009-172.16.5.83-1659947422175:blk_1073741828_1005 file=/test/data.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] Dead nodes:  DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK]
+2022/08/10 13:39:17 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 777"
+2022/08/10 13:39:18 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 751"
+2022/08/10 13:39:18 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod ugo+r"
+2022/08/10 13:39:18 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod abc"
+2022/08/10 13:39:18 [WARNING] utils.HDFSUtils.chmod: Illeagal permission abc
+2022/08/10 13:54:02 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 777"
+2022/08/10 13:54:02 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 751"
+2022/08/10 13:54:02 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod ugo+r"
+2022/08/10 13:54:02 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod abc"
+2022/08/10 13:54:02 [WARNING] utils.HDFSUtils.chmod: Illeagal permission abc
+2022/08/10 13:55:38 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 777"
+2022/08/10 13:55:38 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod 751"
+2022/08/10 13:55:38 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod ugo+r"
+2022/08/10 13:55:38 [INFO] utils.HDFSUtils.chmod: "hadoop fs -chmod abc"
+2022/08/10 13:55:38 [WARNING] utils.HDFSUtils.chmod: Illeagal permission abc
+2022/08/10 14:03:00 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/heword.txt src/main/resources"
+2022/08/10 14:03:00 [SEVERE] utils.HDFSUtils.get: File does not exist: /test/heword.txt
+2022/08/10 14:03:00 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/data.txt src/main/resources"
+2022/08/10 14:06:11 [SEVERE] utils.HDFSUtils.get: Could not obtain block: BP-897045009-172.16.5.83-1659947422175:blk_1073741828_1005 file=/test/data.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] Dead nodes:  DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK]
+2022/08/10 14:18:40 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/heword.txt src/main/resources"
+2022/08/10 14:18:40 [SEVERE] utils.HDFSUtils.get: File does not exist: /test/heword.txt
+2022/08/10 14:18:40 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/book.txt src/main/resources"
+2022/08/10 14:21:48 [SEVERE] utils.HDFSUtils.get: Could not obtain block: BP-897045009-172.16.5.83-1659947422175:blk_1073741831_1010 file=/test/book.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] Dead nodes:  DatanodeInfoWithStorage[112.74.164.126:9866,DS-1bacac0d-f2b4-4d7d-a29f-4c6e69c69f7e,DISK] DatanodeInfoWithStorage[119.23.224.219:9866,DS-d7784a79-a51a-46a6-91e4-a0dabfc5ae40,DISK]
+2022/08/10 14:44:29 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/heword.txt src/main/resources"
+2022/08/10 14:44:29 [SEVERE] utils.HDFSUtils.get: File does not exist: /test/heword.txt
+2022/08/10 14:44:29 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/book.txt src/main/resources"
+2022/08/10 14:46:15 [SEVERE] utils.HDFSUtils.get: Could not obtain block: BP-1856146676-172.16.5.83-1660113767594:blk_1073741826_1002 file=/test/book.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[119.23.224.219:9866,DS-a1653a72-9377-4c5d-8ace-15671e4667de,DISK] Dead nodes:  DatanodeInfoWithStorage[119.23.224.219:9866,DS-a1653a72-9377-4c5d-8ace-15671e4667de,DISK]
+2022/08/10 15:14:39 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 1 datanode(s) running and 1 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:19:14 [SEVERE] utils.HDFSUtils.put: Cannot create file/test/test.txt. Name node is in safe mode.
+The reported blocks 2 has reached the threshold 0.9990 of total blocks 2. The minimum number of live datanodes is not required. In safe mode extension. Safe mode will be turned off automatically in 2 seconds. NamenodeHostName:master
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.newSafemodeException(FSNamesystem.java:1515)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.checkNameNodeSafeMode(FSNamesystem.java:1502)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.startFileInt(FSNamesystem.java:2518)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.startFile(FSNamesystem.java:2464)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.create(NameNodeRpcServer.java:809)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.create(ClientNamenodeProtocolServerSideTranslatorPB.java:478)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:21:25 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 1 datanode(s) running and 1 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:26:03 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 2 datanode(s) running and 2 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:35:14 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 2 datanode(s) running and 2 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:38:47 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 2 datanode(s) running and 2 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:40:08 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 2 datanode(s) running and 2 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:43:09 [SEVERE] utils.HDFSUtils.put: File /test/test.txt could only be written to 0 of the 1 minReplication nodes. There are 2 datanode(s) running and 2 node(s) are excluded in this operation.
+	at org.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock(BlockManager.java:2276)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirWriteFileOp.chooseTargetForNewBlock(FSDirWriteFileOp.java:294)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.getAdditionalBlock(FSNamesystem.java:2820)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.addBlock(NameNodeRpcServer.java:910)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.addBlock(ClientNamenodeProtocolServerSideTranslatorPB.java:577)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022/08/10 15:44:06 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/heword.txt src/main/resources"
+2022/08/10 15:44:06 [SEVERE] utils.HDFSUtils.get: File does not exist: /test/heword.txt
+2022/08/10 15:44:06 [INFO] utils.HDFSUtils.get: "hadoop fs -get /test/book.txt src/main/resources"
+2022/08/10 15:47:18 [SEVERE] utils.HDFSUtils.get: Could not obtain block: BP-1494984664-172.16.5.83-1660116225915:blk_1073741826_1002 file=/test/book.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[119.23.224.219:9866,DS-03953677-cced-4c84-b9f5-4b2f8ef3f81f,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-0a485f50-4bc4-42a5-9b48-581589d955c3,DISK] Dead nodes:  DatanodeInfoWithStorage[119.23.224.219:9866,DS-03953677-cced-4c84-b9f5-4b2f8ef3f81f,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-0a485f50-4bc4-42a5-9b48-581589d955c3,DISK]
+2022/08/11 11:18:23 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data.txt /test/dir"
+2022/08/11 11:21:52 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data.txt /test/dir/"
+2022/08/11 11:24:47 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data.txt /test/dir/data.txt"
+2022/08/11 11:28:29 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data.txt /test/dir/data.txt"
+2022/08/11 11:36:20 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data.txt /test/data1.txt"
+2022/08/11 12:26:18 [INFO] utils.HDFSUtils.mkdir: "hadoop fs -mkdir /test/dir"
+2022/08/11 12:26:35 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/data1.txt /test/dir/data1.txt"
+2022/08/11 12:27:21 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /warehousedir /test/dir/"
+2022/08/11 12:27:53 [INFO] utils.HDFSUtils.cp: "hadoop fs -cp /test/dir/warehousedir /"
+2022/08/11 12:40:01 [INFO] utils.HDFSUtils.df: "hadoop fs -df /"
+2022/08/11 12:49:14 [INFO] utils.HDFSUtils.df: "hadoop fs -df /"
+2022/08/11 12:49:37 [INFO] utils.HDFSUtils.df: "hadoop fs -df /"
+2022/08/11 12:51:59 [INFO] utils.HDFSUtils.df: "hadoop fs -df /"
+2022/08/11 13:14:29 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/touzhTest.txt"
+2022/08/11 13:14:29 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/book.txt"
+2022/08/11 13:14:29 [WARNING] utils.HDFSUtils.touchz: File /test/book.txt already exits
+2022/08/11 13:37:50 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/touzhTest.txt"
+2022/08/11 13:37:50 [WARNING] utils.HDFSUtils.touchz: File /test/touzhTest.txt already exits
+2022/08/11 13:37:50 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/book.txt"
+2022/08/11 13:37:50 [WARNING] utils.HDFSUtils.touchz: File /test/book.txt already exits
+2022/08/11 13:38:19 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/touzhTest.txt"
+2022/08/11 13:38:19 [WARNING] utils.HDFSUtils.touchz: File /test/touzhTest.txt already exits
+2022/08/11 13:38:19 [INFO] utils.HDFSUtils.touchz: "hadoop fs -touchz /test/book.txt"
+2022/08/11 13:38:19 [WARNING] utils.HDFSUtils.touchz: File /test/book.txt already exits
+2022/08/11 13:41:58 [SEVERE] utils.HDFSUtils.mv: Could not obtain block: BP-1494984664-172.16.5.83-1660116225915:blk_1073741826_1002 file=/test/book.txt No live nodes contain current block Block locations: DatanodeInfoWithStorage[112.74.164.126:9866,DS-0a485f50-4bc4-42a5-9b48-581589d955c3,DISK] DatanodeInfoWithStorage[119.23.224.219:9866,DS-03953677-cced-4c84-b9f5-4b2f8ef3f81f,DISK] Dead nodes:  DatanodeInfoWithStorage[119.23.224.219:9866,DS-03953677-cced-4c84-b9f5-4b2f8ef3f81f,DISK] DatanodeInfoWithStorage[112.74.164.126:9866,DS-0a485f50-4bc4-42a5-9b48-581589d955c3,DISK]
+2022/08/11 13:45:32 [INFO] utils.HDFSUtils.test: "hadoop fs -test -s "

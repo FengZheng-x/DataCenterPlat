@@ -5,12 +5,15 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
@@ -18,10 +21,9 @@ public class HDFSUtils {
     private final URI hdfsPath;
     private Configuration conf;
     private FileSystem fs;
-    // 用于格式化输出文件信息
-    private String formatLine = "";
+    private String formatLine = ""; // 用于格式化输出文件信息
 
-    Logger logger;
+    private static Logger logger;
     FileHandler fileHandler;
 
 
@@ -39,18 +41,23 @@ public class HDFSUtils {
         setLogger();
     }
 
+    /**
+     * 设置日志信息
+     */
     private void setLogger() {
         try {
             logger = Logger.getLogger("HDFS API");
             fileHandler = new FileHandler(Constants.HDFS_LOG_FILE, true);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
+        } finally {
+            fileHandler.setFormatter(new LogFormatter()); // 格式化输出日志信息
+            logger.addHandler(fileHandler); // 日志输出到文件中
         }
-        fileHandler.setFormatter(new LogFormatter());
     }
 
     /**
-     * 设置 HDFS 属性信息
+     * 设置HDFS属性信息
      *
      * @param name  属性名
      * @param value 属性值
@@ -60,7 +67,7 @@ public class HDFSUtils {
     }
 
     /**
-     * 获取 HDFS 属性信息
+     * 获取HDFS属性信息
      *
      * @param name 属性名
      * @return 属性值
@@ -69,12 +76,26 @@ public class HDFSUtils {
         return this.conf.get(name);
     }
 
+    /**
+     * 获取标准HDFS命令格式
+     *
+     * @param action 执行的动作及相应的参数
+     * @param suffix 该动作的操作对象
+     * @return Hadoop fs命令
+     */
     private String getCommand(String action, String suffix) {
         String fsCommand = "hadoop fs -";
-        return fsCommand + action + " " + suffix;
+        return "\"" + fsCommand + action + " " + suffix + "\"";
     }
 
 
+    /**
+     * 将字节转换为人类可读的方式
+     * 如 1024->1k
+     *
+     * @param bytes 字节大小
+     * @return 人类可读的大小
+     */
     public String byteReadable(long bytes) {
         if (bytes == 0)
             return "0";
@@ -140,42 +161,18 @@ public class HDFSUtils {
         }
     }
 
+    /**
+     * 将文件或目录信息格式化
+     *
+     * @param infoList 文件信息列表
+     * @return 格式化后的文件信息列表
+     */
     private String[] processPath(ArrayList<String[]> infoList) {
         String[] lines = new String[infoList.size()];
         for (int i = 0; i < infoList.size(); i++) {
             lines[i] = String.format(this.formatLine, infoList.get(i));
         }
         return lines;
-    }
-
-    /**
-     * 将本地文件附加到目标文件中
-     */
-    public void appendToFile(String src, String dest) {
-        // TODO
-    }
-
-    /**
-     * 输出文件内容
-     *
-     * @param file HDFS文件
-     */
-    public void cat(String file) throws IOException {
-        // 与hdfs建立联系
-        //        Path path = new Path(file);
-        //        System.out.println(getCommand("cat", file));
-        //        FSDataInputStream in = fs.open(path);
-        //
-        //        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        //        String line;
-        //
-        //
-        //        while (br.readLine() != null) {
-        //            line = br.readLine();
-        //            System.out.println(line);
-        //        }
-        //        fs.close();
-        //        br.close();
     }
 
     /**
@@ -188,76 +185,89 @@ public class HDFSUtils {
     public void chmod(String fileOrDir, String permission) {
         try {
             Path path = new Path(fileOrDir);
+            logger.info(getCommand("chmod", permission));
             fs.setPermission(path, new FsPermission(permission));
+        } catch (IllegalArgumentException e) {
+            logger.warning("Illeagal permission " + e.getMessage());
         } catch (IOException e) {
             logger.severe(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     /**
-     * 将文件或目录复制到目的文件或目的目录
+     * 将文件或目录复制到目的文件或目的文件或目录
      *
-     * @param fileOrDir
-     * @param dest
+     * @param fileOrDir 原文件或目录
+     * @param dest      目的文件目录
      */
-    public void cp(String fileOrDir, String dest, boolean override) {
-        // TODO
+    public void cp(String fileOrDir, String dest) {
+        try {
+            Path src = new Path(fileOrDir);
+            Path destPath = new Path(dest);
+            logger.info(getCommand("cp", fileOrDir + " " + dest));
+            fs.rename(src, destPath);
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
     }
 
     /**
-     * 显示可用空间
+     * 显示可用空间信息
+     * 总容量 size
+     * 已使用 used
+     * 可用   available
      *
-     * @param fileOrDir
-     * @param humanReadable 以人类可读的方式格式化文件大小(67108864->64.0m)
+     * @return HDFS可用空间的 {@link HashMap<String, Long>}
      */
-    public void df(String fileOrDir, boolean humanReadable) {
-        // TODO
-    }
+    public HashMap<String, Long> df() {
+        try {
+            Path path = new Path("/");
+            logger.info(getCommand("df", "/"));
+            long size = fs.getStatus(path).getCapacity();
+            long used = fs.getStatus(path).getUsed();
+            long available = fs.getStatus(path).getRemaining();
+            NumberFormat format = NumberFormat.getInstance();
+            format.setMaximumFractionDigits(1);
+            double number = 1.0 * used / size;
+            String result = format.format(number);
 
-    /**
-     * 若为文件则显示文件的长度
-     * 若为目录则显示其中中包含的文件和目录的大小
-     * 总文件大小 目录下所有文件在集群上的总存储大小 路径
-     *
-     * @param fileOrDir
-     */
-    public void du(String fileOrDir, boolean humanReadable) {
-        // TODO
-    }
-
-    /**
-     * 显示所有文件的长度汇总
-     *
-     * @param file
-     */
-    public void dus(String file) {
-        // TODO
-    }
-
-    /**
-     * 获取文件或目录至本地文件系统
-     *
-     * @param delScr 是否删除
-     * @param src
-     * @param dest
-     */
-    public void get(boolean delScr, String src, String dest, boolean override) throws IOException {
-        logger.addHandler(fileHandler);
-        logger.info(getCommand("get", src + " " + dest));
-        fs.copyToLocalFile(delScr, new Path(src), new Path(dest));
-        logger.info(src + " to " + dest);
-        fs.close();
+            HashMap<String, Long> map = new HashMap<>(3);
+            map.put("size", size);
+            map.put("used", used);
+            map.put("available", available);
+            return map;
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+        return new HashMap<>();
     }
 
     /**
      * 获取文件或目录至本地文件系统
      *
-     * @param src
-     * @param dest
+     * @param delSrc 是否删除源文件或目录
+     * @param src    HDFS文件或目录路径
+     * @param dest   本地路径
      */
-    public void get(String src, String dest) throws IOException {
-        get(false, src, dest, false);
+    public void get(boolean delSrc, String src, String dest) {
+        try {
+            logger.info(getCommand("get", src + " " + dest));
+            fs.copyToLocalFile(delSrc, new Path(src), new Path(dest));
+            logger.info(src + " to " + dest);
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取文件或目录至本地文件系统
+     * 保留原文件或目录
+     *
+     * @param src  HDFS文件或目录路径
+     * @param dest 本地路径
+     */
+    public void get(String src, String dest) {
+        get(false, src, dest);
     }
 
     /**
@@ -277,12 +287,10 @@ public class HDFSUtils {
             command = command + " -h";
         if (directory)
             command = command + " -d";
-        logger.addHandler(fileHandler);
         logger.info(getCommand(command, dir));
         try {
             Path path = new Path(dir);
             FileStatus[] fileList = fs.listStatus(path);
-            System.out.println("Found " + fileList.length + " items");
             ArrayList<String[]> infoList = new ArrayList<>(fileList.length);
             for (FileStatus stat : fileList) {
                 infoList.add(getFileInfo(stat, humanReadable));
@@ -339,7 +347,7 @@ public class HDFSUtils {
     }
 
     /**
-     * 递归显示目录下的所有文件
+     * 递归显示目录下的所有文件或目录
      * 显示信息：
      * 权限 副本数 用户ID 组ID 修改日期 修改时间 文件名
      *
@@ -355,7 +363,6 @@ public class HDFSUtils {
             command = command + " -h";
         if (directory)
             command = command + " -d";
-        logger.addHandler(fileHandler);
         logger.info(getCommand(command, dir));
         try {
             Path path = new Path(dir);
@@ -393,32 +400,63 @@ public class HDFSUtils {
      *
      * @param dir 目录路径
      */
-    public void mkdir(String dir) throws IOException {
-        Path path = new Path(dir);
-        logger.addHandler(fileHandler);
-        logger.info(getCommand("mkdir", dir));
-        if (fs.exists(path))
-            logger.warning("Path " + dir + " already exits");
-        fs.mkdirs(path);
+    public void mkdir(String dir) {
+        try {
+            Path path = new Path(dir);
+            logger.info(getCommand("mkdir", dir));
+            if (fs.exists(path))
+                logger.warning("Path " + dir + " already exits");
+            fs.mkdirs(path);
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * 移动文件或目录
+     *
+     * @param src 原文件或目录
+     * @param dest 目的文件或目录
+     * @param delSrc 是否删除原文件或目录
+     */
+    public void mv(String src, String dest, boolean delSrc) {
+        try {
+            Path srcPath = new Path(src);
+            Path destPath = new Path(dest);
+            FileUtil.copy(fs, srcPath, fs, destPath, delSrc, this.conf);
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void mv(String src, String dest) {
-        //        try {
-        //            Path srcPath = new Path(src);
-        //        }catch (IOException e){
-        //        logger.severe(e.getMessage());
-        //            e.printStackTrace();
-        //        }
+        mv(src, dest, true);
     }
 
-    public void put(boolean delSrc, String src, String dest) throws IOException {
-        System.out.println(getCommand("put", src + " " + dest));
-        fs.copyFromLocalFile(delSrc, new Path(src), new Path(dest));
-        System.out.println(src + " to " + dest);
-        fs.close();
+    /**
+     * 获取文件或目录至本地文件系统
+     *
+     * @param delSrc 是否删除原文件或目录
+     * @param src    HDFS文件或目录路径
+     * @param dest   本地路径
+     */
+    public void put(boolean delSrc, String src, String dest) {
+        try {
+            fs.copyFromLocalFile(delSrc, new Path(src), new Path(dest));
+            logger.info(getCommand("put", src + " " + dest));
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
     }
 
-    public void put(String src, String dest) throws IOException {
+    /**
+     * 获取文件或目录至本地文件系统
+     *
+     * @param src  HDFS文件或目录路径
+     * @param dest 本地路径
+     */
+    public void put(String src, String dest) {
         put(false, src, dest);
     }
 
@@ -443,7 +481,7 @@ public class HDFSUtils {
     public void rm(String fileOrDir) {
         try {
             Path path = new Path(fileOrDir);
-            System.out.println(getCommand("rm", fileOrDir));
+            logger.info(getCommand("rm", fileOrDir));
             FileStatus stat = fs.getFileStatus(path);
             if (fs.exists(path)) {
                 if (!isEmptyDir(stat, fs.listStatus(path).length)) { // 判断是否为空目录
@@ -451,11 +489,10 @@ public class HDFSUtils {
                 }
                 fs.delete(path, false);
             } else {
-                throw new FileNotFoundException("Path " + fileOrDir + " does not exist");
+                logger.warning("Path " + fileOrDir + " does not exist");
             }
         } catch (IOException e) {
             logger.severe(e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -468,15 +505,14 @@ public class HDFSUtils {
     public void rmr(String fileOrDir) {
         try {
             Path path = new Path(fileOrDir);
-            System.out.println(getCommand("rmr", fileOrDir));
+            logger.info(getCommand("rmr", fileOrDir));
             if (fs.exists(path)) {
                 fs.delete(path, true); // 递归删除目录
             } else {
-                throw new FileNotFoundException("Path " + fileOrDir + " does not exist");
+                logger.warning("Path " + fileOrDir + " does not exist");
             }
         } catch (IOException e) {
             logger.severe(e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -487,10 +523,10 @@ public class HDFSUtils {
      * @param fileOrDir 文件或目录路径
      * @param mode      测试模式
      * @return {@code mode}=d 时若路径为目录则返回 {@code true}，否则返回 {@code false}
-     * {@code mode}=e 时若路径存在则返回 {@code true}，否则返回 {@code false}
-     * {@code mode}=f 时若路径为文件则返回 {@code true}，否则返回 {@code false}
-     * {@code mode}=s 时若路径为空目录则返回 {@code true}，否则返回 {@code false}
-     * {@code mode}=z 时若文件大小为0则返回 {@code true}，否则返回 {@code false}
+     * {@code mode=e} 时若路径存在则返回 {@code true}，否则返回 {@code false}
+     * {@code mode=f} 时若路径为文件则返回 {@code true}，否则返回 {@code false}
+     * {@code mode=s} 时若路径为空目录则返回 {@code true}，否则返回 {@code false}
+     * {@code mode=z} 时若文件大小为0则返回 {@code true}，否则返回 {@code false}
      * 发生异常时返回 {@code false}
      */
     public boolean test(String fileOrDir, String mode) {
@@ -499,21 +535,25 @@ public class HDFSUtils {
             FileStatus stat = fs.getFileStatus(path);
             switch (mode) {
                 case "d":
+                    logger.info(getCommand("test -d", ""));
                     return stat.isDirectory();
                 case "e":
+                    logger.info(getCommand("test -e", ""));
                     return fs.exists(path);
                 case "f":
+                    logger.info(getCommand("test -f", ""));
                     return stat.isFile();
                 case "s":
+                    logger.info(getCommand("test -s", ""));
                     return isEmptyDir(stat, fs.listStatus(path).length);
                 case "z":
+                    logger.info(getCommand("test -z", ""));
                     return stat.getLen() == 0;
                 default:
-                    throw new IllegalArgumentException("Arg `mode` can only be set to d, e, f, s or z");
+                    logger.warning("Arg `mode` can only be set to d, e, f, s or z");
             }
         } catch (IOException e) {
             logger.severe(e.getMessage());
-            e.printStackTrace();
         }
         return false;
     }
@@ -568,8 +608,44 @@ public class HDFSUtils {
         return test(file, "z");
     }
 
-
+    /**
+     * 创建一个空文件
+     *
+     * @param file 文件路径
+     */
     public void touchz(String file) {
+        try {
+            Path filePath = new Path(file);
+            logger.info(getCommand("touchz", file));
+            if (fs.exists(filePath)) {
+                logger.warning("File " + file + " already exits");
+            } else {
+                fs.create(filePath);
+            }
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+    }
 
+    /**
+     * @return HDFS命令的使用帮助
+     */
+    public String usage() {
+        return "Usage: hadoop fs" + "\n\t\t" +
+               "[-cat <src>]" + "\n\t\t" +
+               "[-chmod <MODE | OCTALMODE> PATH]" + "\n\t\t" +
+               "[-copyFromLocal <localsrc> <dst>]" + "\n\t\t" +
+               "[-copyToLocal <src> <localdst>]" + "\n\t\t" +
+               "[-cp <src> <dst>]" + "\n\t\t" +
+               "[-df]" + "\n\t\t" +
+               "[-get <src> <localdst>]" + "\n\t\t" +
+               "[-ls [-d] [-h] [-R] [<path>]]" + "\n\t\t" +
+               "[-mkdir <path>" + "\n\t\t" +
+               "[-mv <src> <dst>]" + "\n\t\t" +
+               "[-put <localsrc> <dst>]" + "\n\t\t" +
+               "[-rm [-r|-R] <src>]" + "\n\t\t" +
+               "[-test -[defsz] <path>]" + "\n\t\t" +
+               "[-touchz <path>]" + "\n\t\t" +
+               "[-usage]";
     }
 }

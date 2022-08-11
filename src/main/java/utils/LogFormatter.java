@@ -13,6 +13,7 @@ public class LogFormatter extends Formatter {
         String dateStr = sdf.format(now);
 
         return dateStr + " [" + record.getLevel() + "] " +
+               record.getSourceClassName() + "." +
                record.getSourceMethodName() + ": " +
                record.getMessage() + "\r\n";
     }

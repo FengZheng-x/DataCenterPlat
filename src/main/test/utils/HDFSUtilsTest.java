@@ -20,13 +20,8 @@ public class HDFSUtilsTest {
     public void byteReadableTest() {
         assertEquals("1000", hdfs.byteReadable(1000));
         assertEquals("1k", hdfs.byteReadable(1024));
-        assertEquals("9.42m", hdfs.byteReadable(9874321));
+        assertEquals("9.4m", hdfs.byteReadable(9874321));
         //        assertEquals("9.31g", hdfs.byteReadable(10000000000));
-    }
-
-    @Test
-    public void catTest() throws IOException, URISyntaxException {
-        hdfs.cat("/test/heword.txt");
     }
 
     @Test
@@ -34,82 +29,88 @@ public class HDFSUtilsTest {
         hdfs.chmod("/test", "777");
         hdfs.chmod("/test/test.txt", "751");
         hdfs.chmod("/test/test.txt", "ugo+r");
-//        hdfs.chmod("/test/test.txt", "abc");
+        hdfs.chmod("/test/test.txt", "abc");
     }
 
     @Test
-    public void cpTest() throws IOException {
-        // TODO hdfs.cp();
+    public void cpTest() {
+        hdfs.cp("/test/dir/warehousedir", "/");
     }
 
     @Test
-    public void duTest() throws IOException {
-        // TODO hdfs.du();
+    public void dfTest() {
+        hdfs.df();
+    }
+
+
+    @Test
+    public void getTest() {
+        hdfs.get("/test/heword.txt", "src/main/resources");
+        hdfs.get("/test/book.txt", "src/main/resources");
     }
 
     @Test
-    public void dusTest() throws IOException {
-        // TODO hdfs.dus();
-    }
-
-    @Test
-    public void getTest() throws IOException {
-        hdfs.get("/test/heword.txt", "D:/");
-    }
-
-    @Test
-    public void lsTest(){
+    public void lsTest() {
         String[] infoList = hdfs.ls("/", false, false);
-        for (String info: infoList) {
+        for (String info : infoList) {
             System.out.println(info);
         }
     }
 
     @Test
-    public void lsrTest(){
+    public void lsrTest() {
         System.out.println("humanReadable=true, directory=false");
         String[] infoList = hdfs.lsr("/", true, false);
-        for (String info: infoList) {
+        for (String info : infoList) {
             System.out.println(info);
         }
         System.out.println("---------------");
         System.out.println("humanReadable=false, directory=true");
         String[] infoList2 = hdfs.lsr("/", false, true);
-        for (String info: infoList2) {
+        for (String info : infoList2) {
             System.out.println(info);
         }
     }
 
     @Test
-    public void mkdirTest() throws IOException {
-        hdfs.mkdir("/test/test");
+    public void mkdirTest() {
+        hdfs.mkdir("/test/dir");
     }
 
     @Test
-    public void mvTest() throws IOException {
-        // TODO
-        // hdfs.mv();
+    public void mvTest() {
+        hdfs.mv("/test/book.txt", "/test/dir/book.txt");
     }
 
     @Test
-    public void putTest() throws IOException {
+    public void putTest() {
         hdfs.put("src/main/resources/test.txt", "/test");
     }
 
 
     @Test
-    public void rmTest() throws IOException {
+    public void rmTest() {
         hdfs.rm("/test/test");
     }
 
     @Test
-    public void rmrTest() throws IOException {
+    public void rmrTest() {
         hdfs.rmr("/test");
     }
 
     @Test
     public void isEmptyDirTest() {
-        //        FileStatus fst = new FileSystem().getFileStatus();
-        //        assert hdfs.isEmptyDir("")==true;
+        assertFalse(hdfs.isEmptyDir("/test"));
+    }
+
+    @Test
+    public void touchzTest() {
+        hdfs.touchz("/test/touzhTest.txt");
+        hdfs.touchz("/test/book.txt");
+    }
+
+    @Test
+    public void usageTest() {
+        System.out.println(hdfs.usage());
     }
 }
