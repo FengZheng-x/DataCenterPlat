@@ -1,12 +1,10 @@
 package utils;
 
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -39,7 +37,10 @@ public class HDFSUtilsTest {
 
     @Test
     public void dfTest() {
-        hdfs.df();
+        HashMap<String, Long> map = hdfs.df();
+        System.out.println("size=" + map.get("size"));
+        System.out.println("used" + map.get("used"));
+        System.out.println("available" + map.get("available"));
     }
 
 

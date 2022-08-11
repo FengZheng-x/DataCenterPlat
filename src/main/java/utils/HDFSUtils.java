@@ -5,10 +5,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.NumberFormat;
@@ -19,8 +16,8 @@ import java.util.logging.Logger;
 
 public class HDFSUtils {
     private final URI hdfsPath;
-    private Configuration conf;
-    private FileSystem fs;
+    private final Configuration conf;
+    private final FileSystem fs;
     private String formatLine = ""; // 用于格式化输出文件信息
 
     private static Logger logger;
@@ -226,10 +223,6 @@ public class HDFSUtils {
             long size = fs.getStatus(path).getCapacity();
             long used = fs.getStatus(path).getUsed();
             long available = fs.getStatus(path).getRemaining();
-            NumberFormat format = NumberFormat.getInstance();
-            format.setMaximumFractionDigits(1);
-            double number = 1.0 * used / size;
-            String result = format.format(number);
 
             HashMap<String, Long> map = new HashMap<>(3);
             map.put("size", size);
