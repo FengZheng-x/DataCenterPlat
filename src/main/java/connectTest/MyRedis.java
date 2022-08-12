@@ -1,12 +1,9 @@
-package connect;
+package connectTest;
 
 import redis.clients.jedis.Jedis;
 import commons.Constants;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MyRedis {
     public static void main(String[] args) {

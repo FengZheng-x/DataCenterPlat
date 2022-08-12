@@ -1,4 +1,4 @@
-package connect;
+package connectTest;
 
 import java.sql.*;
 

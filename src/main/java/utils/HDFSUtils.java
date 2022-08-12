@@ -453,14 +453,6 @@ public class HDFSUtils {
         put(false, src, dest);
     }
 
-    //    private void delete(Path path) throws IOException {
-    //        if (fs.deleteOnExit(path)) {
-    //            complete();
-    //        } else {
-    //            throw new FileExistsException("The file " + path.getName() + " does not exist!");
-    //        }
-    //    }
-
     private boolean isEmptyDir(FileStatus stat, int len) {
         return stat.isDirectory() && len == 0;
     }
