@@ -1,4 +1,4 @@
-package utils;
+package commons.utils;
 
 import commons.Constants;
 import org.apache.hadoop.conf.Configuration;
