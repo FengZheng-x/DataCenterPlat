@@ -1,11 +1,12 @@
 package com.xzz.entity;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.ext.JodaDeserializers.LocalDateTimeDeserializer;
-import org.codehaus.jackson.map.ext.JodaSerializers.LocalDateTimeSerializer;
+import org.codehaus.jackson.map.ext.JodaDeserializers.DateTimeDeserializer;
+import org.codehaus.jackson.map.ext.JodaSerializers;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
@@ -77,15 +78,15 @@ public class Sku implements Serializable {
     /**
      * 创建时间
      */
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+//    @JsonDeserialize(using = DateTimeDeserializer.class)
+//    @JsonSerialize(using = JodaSerializers.DateTimeSerializer.class)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+//    @JsonDeserialize(using = DateTimeDeserializer.class)
+//    @JsonSerialize(using = JodaSerializers.DateTimeSerializer.class)
     private LocalDateTime updateTime;
 
     /**

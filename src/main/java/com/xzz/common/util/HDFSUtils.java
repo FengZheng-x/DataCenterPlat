@@ -22,9 +22,6 @@ public class HDFSUtils {
     private final FileSystem fs;
     private String formatLine = ""; // 用于格式化输出文件信息
 
-    private final Logger logger = LoggerFactory.getLogger("hdfs");
-
-
     public HDFSUtils() throws URISyntaxException, IOException {
         this.hdfsPath = new URI(Constants.HDFS_URL);
         this.conf = new Configuration();
@@ -61,12 +58,29 @@ public class HDFSUtils {
      * 获取标准HDFS命令格式
      *
      * @param action 执行的动作及相应的参数
-     * @param suffix 该动作的操作对象
+     * @param prefix 该动作的操作对象
      * @return Hadoop fs命令
      */
-    private String getCommand(String action, String suffix) {
+    private String getCommand(String action, String prefix) {
         String fsCommand = "hadoop fs -";
-        return "\"" + fsCommand + action + " " + suffix + "\"";
+        return String.format("\"%s%s %s\"", fsCommand, action, prefix);
+    }
+
+    /**
+     * 获取标准HDFS命令格式
+     *
+     * @param action 执行的动作及相应的参数
+     * @param prefix 该动作的原操作对象
+     * @param suffix 该动作的目的操作对象
+     * @return Hadoop fs命令
+     */
+    private String getCommand(String action, String prefix, String suffix) {
+        String fsCommand = "hadoop fs -";
+        return String.format("\"%s%s %s %s\"", fsCommand, action, prefix, suffix);
+    }
+
+    private String addArg(String original, String arg) {
+        return String.format("%s -%s", original, arg);
     }
 
 
@@ -166,12 +180,12 @@ public class HDFSUtils {
     public void chmod(String fileOrDir, String permission) {
         try {
             Path path = new Path(fileOrDir);
-            logger.info(getCommand("chmod", permission));
+            log.info(getCommand("chmod", permission));
             fs.setPermission(path, new FsPermission(permission));
         } catch (IllegalArgumentException e) {
-            logger.warn("Illeagal permission " + e.getMessage());
+            log.warn("Illeagal permission " + e.getMessage());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -185,10 +199,10 @@ public class HDFSUtils {
         try {
             Path src = new Path(fileOrDir);
             Path destPath = new Path(dest);
-            logger.info(getCommand("cp", fileOrDir + " " + dest));
+            log.info(getCommand("cp", fileOrDir, dest));
             fs.rename(src, destPath);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -203,7 +217,7 @@ public class HDFSUtils {
     public HashMap<String, Long> df() {
         try {
             Path path = new Path("/");
-            logger.info(getCommand("df", "/"));
+            log.info(getCommand("df", "/"));
             long size = fs.getStatus(path).getCapacity();
             long used = fs.getStatus(path).getUsed();
             long available = fs.getStatus(path).getRemaining();
@@ -214,7 +228,7 @@ public class HDFSUtils {
             map.put("available", available);
             return map;
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return new HashMap<>();
     }
@@ -228,11 +242,11 @@ public class HDFSUtils {
      */
     public void get(boolean delSrc, String src, String dest) {
         try {
-            logger.info(getCommand("get", src + " " + dest));
+            log.info(getCommand("get", src, dest));
             fs.copyToLocalFile(delSrc, new Path(src), new Path(dest));
-            logger.info(src + " to " + dest);
+            log.info(src + " to " + dest);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -261,10 +275,10 @@ public class HDFSUtils {
         this.formatLine = "";
         String command = "ls -R";
         if (humanReadable)
-            command = command + " -h";
+            command = addArg(command, "h");
         if (directory)
-            command = command + " -d";
-        logger.info(getCommand(command, dir));
+            command = addArg(command, "d");
+        log.info(getCommand(command, dir));
         try {
             Path path = new Path(dir);
             FileStatus[] fileList = fs.listStatus(path);
@@ -275,7 +289,7 @@ public class HDFSUtils {
             getFormat(infoList);
             return processPath(infoList);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         return new String[]{};
@@ -317,7 +331,7 @@ public class HDFSUtils {
                 }
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         return fileList;
@@ -337,10 +351,10 @@ public class HDFSUtils {
         this.formatLine = "";
         String command = "ls -R";
         if (humanReadable)
-            command = command + " -h";
+            command = addArg(command, "h");
         if (directory)
-            command = command + " -d";
-        logger.info(getCommand(command, dir));
+            command = addArg(command, "d");
+        log.info(getCommand(command, dir));
         try {
             Path path = new Path(dir);
             ArrayList<FileStatus> fileList = getAllPath(path, directory);
@@ -351,7 +365,7 @@ public class HDFSUtils {
             getFormat(infoList);
             return processPath(infoList);
         } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         return new String[]{};
@@ -380,12 +394,12 @@ public class HDFSUtils {
     public void mkdir(String dir) {
         try {
             Path path = new Path(dir);
-            logger.info(getCommand("mkdir", dir));
+            log.info(getCommand("mkdir", dir));
             if (fs.exists(path))
-                logger.warn("Path " + dir + " already exits");
+                log.warn("Path {} already exits", dir);
             fs.mkdirs(path);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -402,7 +416,7 @@ public class HDFSUtils {
             Path destPath = new Path(dest);
             FileUtil.copy(fs, srcPath, fs, destPath, delSrc, this.conf);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -421,9 +435,9 @@ public class HDFSUtils {
     public void put(boolean delSrc, String src, String dest) {
         try {
             fs.copyFromLocalFile(delSrc, new Path(src), new Path(dest));
-            logger.info(getCommand("put", src + " " + dest));
+            log.info(getCommand("put", src, dest));
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -450,7 +464,7 @@ public class HDFSUtils {
     public void rm(String fileOrDir) {
         try {
             Path path = new Path(fileOrDir);
-            logger.info(getCommand("rm", fileOrDir));
+            log.info(getCommand("rm", fileOrDir));
             FileStatus stat = fs.getFileStatus(path);
             if (fs.exists(path)) {
                 if (!isEmptyDir(stat, fs.listStatus(path).length)) { // 判断是否为空目录
@@ -458,10 +472,10 @@ public class HDFSUtils {
                 }
                 fs.delete(path, false);
             } else {
-                logger.warn("Path " + fileOrDir + " does not exist");
+                log.warn("Path {} does not exist", fileOrDir);
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -474,14 +488,14 @@ public class HDFSUtils {
     public void rmr(String fileOrDir) {
         try {
             Path path = new Path(fileOrDir);
-            logger.info(getCommand("rmr", fileOrDir));
+            log.info(getCommand("rmr", fileOrDir));
             if (fs.exists(path)) {
                 fs.delete(path, true); // 递归删除目录
             } else {
-                logger.warn("Path " + fileOrDir + " does not exist");
+                log.warn("Path {} does not exist", fileOrDir);
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -504,25 +518,25 @@ public class HDFSUtils {
             FileStatus stat = fs.getFileStatus(path);
             switch (mode) {
                 case "d":
-                    logger.info(getCommand("test -d", ""));
+                    log.info(getCommand("test -d", ""));
                     return stat.isDirectory();
                 case "e":
-                    logger.info(getCommand("test -e", ""));
+                    log.info(getCommand("test -e", ""));
                     return fs.exists(path);
                 case "f":
-                    logger.info(getCommand("test -f", ""));
+                    log.info(getCommand("test -f", ""));
                     return stat.isFile();
                 case "s":
-                    logger.info(getCommand("test -s", ""));
+                    log.info(getCommand("test -s", ""));
                     return isEmptyDir(stat, fs.listStatus(path).length);
                 case "z":
-                    logger.info(getCommand("test -z", ""));
+                    log.info(getCommand("test -z", ""));
                     return stat.getLen() == 0;
                 default:
-                    logger.warn("Arg `mode` can only be set to d, e, f, s or z");
+                    log.warn("Arg `mode` can only be set to d, e, f, s or z");
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return false;
     }
@@ -585,14 +599,14 @@ public class HDFSUtils {
     public void touchz(String file) {
         try {
             Path filePath = new Path(file);
-            logger.info(getCommand("touchz", file));
+            log.info(getCommand("touchz", file));
             if (fs.exists(filePath)) {
-                logger.warn("File " + file + " already exits");
+                log.warn("File {} already exits", file);
             } else {
                 fs.create(filePath);
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
