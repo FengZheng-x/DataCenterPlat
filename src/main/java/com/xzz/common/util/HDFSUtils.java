@@ -29,30 +29,13 @@ public class HDFSUtils {
         this.hdfsPath = new URI(Constants.HDFS_URL);
         this.conf = new Configuration();
         this.fs = FileSystem.get(this.hdfsPath, this.conf);
-//        setLogger();
     }
 
     public HDFSUtils(String hdfs, Configuration conf) throws URISyntaxException, IOException {
         this.hdfsPath = new URI(hdfs);
         this.conf = conf;
         this.fs = FileSystem.get(this.hdfsPath, this.conf);
-//        setLogger();
     }
-
-//    /**
-//     * 设置日志信息
-//     */
-//    private void setLogger() {
-//        try {
-//            logger = Logger.getLogger("HDFS API");
-//            fileHandler = new FileHandler(Constants.HDFS_LOG_FILE, true);
-//        } catch (IOException e) {
-//            logger.error(e.getMessage());
-//        } finally {
-//            fileHandler.setFormatter(new LogFormatter()); // 格式化输出日志信息
-//            logger.addHandler(fileHandler); // 日志输出到文件中
-//        }
-//    }
 
     /**
      * 设置HDFS属性信息
@@ -168,7 +151,7 @@ public class HDFSUtils {
     private String[] processPath(ArrayList<String[]> infoList) {
         String[] lines = new String[infoList.size()];
         for (int i = 0; i < infoList.size(); i++) {
-            lines[i] = String.format(this.formatLine,  infoList.get(i));
+            lines[i] = String.format(this.formatLine, infoList.get(i));
         }
         return lines;
     }

@@ -1,1 +1,164 @@
-2022-08-15 13:14:31,220 [INFO ] (hdfs.main): "hadoop fs -ls -R /"
+2022-08-15 13:24:29,376 [INFO ] (hdfs.main): "hadoop fs -df /"
+2022-08-15 13:24:46,476 [INFO ] (hdfs.main): "hadoop fs -ls -R /"
+2022-08-15 13:26:25,312 [INFO ] (hdfs.main): "hadoop fs -chmod 777"
+2022-08-15 13:26:25,489 [ERROR] (hdfs.main): Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 13:26:25,490 [INFO ] (hdfs.main): "hadoop fs -chmod 751"
+2022-08-15 13:26:25,536 [INFO ] (hdfs.main): "hadoop fs -chmod ugo+r"
+2022-08-15 13:26:25,584 [INFO ] (hdfs.main): "hadoop fs -chmod abc"
+2022-08-15 13:26:25,585 [WARN ] (hdfs.main): Illeagal permission abc
+2022-08-15 13:52:40 INFO  hdfs:169 - "hadoop fs -chmod 777"
+2022-08-15 13:52:41 ERROR hdfs:174 - Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 13:52:41 INFO  hdfs:169 - "hadoop fs -chmod 751"
+2022-08-15 13:52:41 INFO  hdfs:169 - "hadoop fs -chmod ugo+r"
+2022-08-15 13:52:41 INFO  hdfs:169 - "hadoop fs -chmod abc"
+2022-08-15 13:52:41 WARN  hdfs:172 - Illeagal permission abc
+2022-08-15 14:02:51 [INFO ] 0m - "hadoop fs -chmod 777"
+2022-08-15 14:02:51 [ERROR] 185m - Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 14:02:51 [INFO ] 186m - "hadoop fs -chmod 751"
+2022-08-15 14:02:52 [INFO ] 229m - "hadoop fs -chmod ugo+r"
+2022-08-15 14:02:52 [INFO ] 272m - "hadoop fs -chmod abc"
+2022-08-15 14:02:52 [WARN ] 274m - Illeagal permission abc
+2022-08-15 14:03:21 [INFO ] 0ms: "hadoop fs -chmod 777"
+2022-08-15 14:03:21 [ERROR] 217ms: Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 14:03:21 [INFO ] 217ms: "hadoop fs -chmod 751"
+2022-08-15 14:03:21 [INFO ] 275ms: "hadoop fs -chmod ugo+r"
+2022-08-15 14:03:21 [INFO ] 316ms: "hadoop fs -chmod abc"
+2022-08-15 14:03:21 [WARN ] 317ms: Illeagal permission abc
+2022-08-15 14:03:46 [INFO ] 0ms: "hadoop fs -chmod 777"
+2022-08-15 14:03:46 [ERROR] 211ms: Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 14:03:46 [INFO ] 212ms: "hadoop fs -chmod 751"
+2022-08-15 14:03:46 [INFO ] 253ms: "hadoop fs -chmod ugo+r"
+2022-08-15 14:03:46 [INFO ] 292ms: "hadoop fs -chmod abc"
+2022-08-15 14:03:46 [WARN ] 292ms: Illeagal permission abc
+2022-08-15 14:04:17 [INFO ] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:169): "hadoop fs -chmod 777"
+2022-08-15 14:04:18 [ERROR] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:174): Permission denied. user=daisy is not the owner of inode=/test
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkOwner(FSPermissionChecker.java:302)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:269)
+	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:193)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1900)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:1884)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkOwner(FSDirectory.java:1829)
+	at org.apache.hadoop.hdfs.server.namenode.FSDirAttrOp.setPermission(FSDirAttrOp.java:64)
+	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.setPermission(FSNamesystem.java:1952)
+	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.setPermission(NameNodeRpcServer.java:894)
+	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.setPermission(ClientNamenodeProtocolServerSideTranslatorPB.java:536)
+	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$2.callBlockingMethod(ClientNamenodeProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:549)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:518)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1086)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1035)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:963)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:422)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1762)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2960)
+
+2022-08-15 14:04:18 [INFO ] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:169): "hadoop fs -chmod 751"
+2022-08-15 14:04:18 [INFO ] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:169): "hadoop fs -chmod ugo+r"
+2022-08-15 14:04:18 [INFO ] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:169): "hadoop fs -chmod abc"
+2022-08-15 14:04:18 [WARN ] com.xzz.common.util.HDFSUtils.chmod(HDFSUtils.java:172): Illeagal permission abc
