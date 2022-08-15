@@ -1,0 +1,1 @@
+2022-08-15 12:32:06,194 [INFO ] (com.xzz.common.util.HDFSUtils.main): "hadoop fs -df /"

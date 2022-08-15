@@ -1,0 +1,279 @@
+package com.xzz.service.impl;
+
+import com.xzz.service.ShopCartService;
+import com.xzz.service.SkuService;
+import com.xzz.common.constants.ShopCartConstant;
+import com.xzz.common.enums.ResponseEnum;
+import com.xzz.common.enums.StatusEnum;
+import com.xzz.common.exception.ValidateException;
+import com.xzz.dto.ShopCartDTO;
+import com.xzz.dto.ShopCartItemDTO;
+import com.xzz.dto.ShopCartSkuDTO;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * 购物车服务实现
+ */
+@Service
+public class ShopCartServiceImpl implements ShopCartService {
+    private SkuService skuService;
+
+    private RedisTemplate<String, Serializable> redisTemplate;
+
+    private HashOperations<String, Object, Object> hashOperations;
+
+    public ShopCartServiceImpl(RedisTemplate<String, Serializable> redisTemplate,
+                               SkuService skuService) {
+        this.redisTemplate = redisTemplate;
+        this.hashOperations = redisTemplate.opsForHash();
+        this.skuService = skuService;
+    }
+
+    /**
+     * 操作：<p>
+     * 1. 新增一个 sku<p>
+     * 2. 购物车 sku 项点击 "-"，`购物车 sku 总数 count`减一，前端做判断，等于1的时候不能执行该操作<p>
+     * 3. 购物车 sku 项点击 "+"，`购物车 sku 总数 count`加一<p>
+     * 4. 购物车 sku 项手动填`购物车 sku 总数 count`<p>
+     * 其中2和3，都要要求前端根据 sku 的 max 限制 count
+     * (finalValue = count > max ? max : count)
+     * 以上的操作，都调用该方法，将`购物车 sku 总数 count`作为第三参数
+     * <p>
+     * 该方法会对购物车单种 sku 总个数以及购物车 sku 种类数量进行控制，
+     * 并且维护后面用于分组的购物车信息
+     *
+     * @param userId     用户ID
+     * @param skuId      skuID
+     * @param finalValue count 的最终值
+     */
+    @Override
+    public void put(Long userId, Long skuId, Long finalValue) {
+        ShopCartSkuDTO shopCartSkuDTO = checkSkuIfExists(skuId);
+        Integer value = (Integer) hashOperations.get(ShopCartConstant.getCartKey(userId), skuId);
+        if (ObjectUtils.isEmpty(value)) {
+            if (hashOperations.size(ShopCartConstant.getCartKey(userId)) >= ShopCartConstant.ITEM_MAX) {
+                throw new ValidateException(ResponseEnum.SHOP_CART_SKU_COUNT_FULL);
+            }
+            hashOperations.put(ShopCartConstant.getGroupingKey(userId), skuId, shopCartSkuDTO.getShopId());
+        }
+        Integer max = ShopCartConstant.ITEM_MAX > shopCartSkuDTO.getMaxNum() ? shopCartSkuDTO.getMaxNum() :
+                ShopCartConstant.ITEM_MAX;
+        hashOperations.put(ShopCartConstant.getCartKey(userId), skuId, finalValue > max ? max : finalValue);
+    }
+
+    /**
+     * 获取当前的 skuIds 然后封装数据
+     *
+     * @param userId      用户ID
+     * @param currentPage 当前页数
+     * @return
+     */
+    @Override
+    public List<ShopCartDTO> shopCarts(Long userId, Integer currentPage) {
+        List<Long> skuIds = proxy().currentPageSkuIds(userId, currentPage);
+        return CollectionUtils.isEmpty(skuIds) ? new ArrayList<>() : shopCarts(userId, skuIds);
+    }
+
+    /**
+     * 购物车(skuId)分页缓存
+     *
+     * @param userId      用户ID
+     * @param currentPage 当前页码
+     * @return
+     *
+     * @Cacheable unless排除对空集和null的缓存
+     * @desc 使用 Stream#skip + Stream#limit 在流中实现分页
+     */
+    @Override
+    @Cacheable(unless = "#result == null || #result.size() == 0", cacheNames = ShopCartConstant.SHOP_CART_PAGE,
+            key = "#userId + ':' + #currentPage")
+    public List<Long> currentPageSkuIds(Long userId, Integer currentPage) {
+        return proxy().shopCartGrouping(userId).stream()
+                .skip((long) (currentPage - 1) * ShopCartConstant.PAGE_SIZE)
+                .limit(ShopCartConstant.PAGE_SIZE)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获得分组摊平后的购物车（未分页的列表）
+     * [7,6,4,11,10,8,9,1,12,3,2]
+     * 对应三个店铺：[7,6,4], [11,10,8,9], [1,12,3,2]
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    @Override
+    @Cacheable(unless = "#result == null", value = ShopCartConstant.SHOP_CART_SORT, key = "#userId")
+    public List<Long> shopCartGrouping(Long userId) {
+        Map<Object, Object> map = scan(ShopCartConstant.getGroupingKey(userId));
+        List<Map.Entry<Object, Object>> entryList = new ArrayList<>(map.entrySet());
+        // 最新加入购物的sku在最后，所以这里得先反序
+        Collections.reverse(entryList);
+        Map<Object, List<Object>> collect = entryList.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getValue,
+                                // 得到的 key 保留原来（作为 Entry 的 value 时）的顺序（保存put的顺序）
+                                LinkedHashMap::new,
+                                // 得到的 list 元素也要保留顺序 Collectors.toList() -> ArrayList（有序）
+                                Collectors.mapping(Map.Entry::getKey, Collectors.toList())
+                        )
+                );
+        return collect.values().stream()
+                .flatMap(Collection::stream)
+                .map(this::toLong)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 1. 根据 skuIds 获得 shopCartSkuDTOs（封装购物车中sku数量 -> count）
+     * 2. 根据 店铺ID 对 shopCartSkuDTOs 进行分组
+     * 3. 根据 shopCartSkuDTOs 获得店铺集合（已去重），遍历填充数据
+     * 1)去重：这里使用 Stream#distinct 的方式去重，以 "shopId", "shopName" 为标识去除标识重复的数据。在 ShopCartSkuDTO 类上
+     * 加上 @EqualsAndHashCode(of = {"shopId", "shopName"}) 可以实现，后边调用 Stream#distinct 会在底层使用
+     * equals() 和 hashCode() 方法进行去重。
+     * 2)封装：这里使用 Stream#peek 的方式封装，其实可以使用 Stream#map，但是返回类型如果没有改变的话，使用 peek 更直观。
+     * <p>
+     * 这个方法的作用就是封装购物车需要展示的数据，参数为带顺序的购物车列表，店铺的顺序由旗下最新添加的商品顺序决定。
+     * 展示给前端后，临界值看看是否操作，不需要的话他可以直接拿去展示。
+     *
+     * @param userId 用户ID
+     * @param skuIds skuIds
+     * @return
+     */
+    @Override
+    public List<ShopCartDTO> shopCarts(Long userId, List<Long> skuIds) {
+        List<ShopCartSkuDTO> shopCartSkuDTOs = skuIds.stream()
+                .map(skuService::getShopCartSkuById)
+                .collect(Collectors.toList());
+        // Map<Long, List<ShopCartSkuDTO>> -> Map<shopId, List<ShopCartSkuDTO>>
+        Map<Long, List<ShopCartSkuDTO>> shopMap = shopCartSkuDTOs.stream()
+                .collect(Collectors.groupingBy(ShopCartSkuDTO::getShopId));
+        return shopCartSkuDTOs.stream()
+                .distinct()
+                .map(ShopCartDTO::of)
+                .peek(shopCartDTO -> {
+                    List<ShopCartSkuDTO> subShopCartSkuDTOs = shopMap.get(shopCartDTO.getShopId());
+                    List<ShopCartItemDTO> shopCartItemDTOs = ShopCartItemDTO.of(subShopCartSkuDTOs).stream()
+                            .peek(shopCartItemDTO -> {
+                                Integer count = (Integer) hashOperations.get(ShopCartConstant.getCartKey(userId),
+                                        shopCartItemDTO.getId());
+                                shopCartItemDTO.setCount(count);
+                            }).collect(Collectors.toList());
+                    shopCartDTO.setItems(shopCartItemDTOs);
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 将指定的 sku 从购物车移除。SORT_SHOP_CART 和 SHOP_CART_PAGE 一定会变的，所以需要清除缓存。
+     *
+     * @param userId 用户ID
+     * @param skuIds skuID数组（该参数必须是可变参数或者数组，后面需要转为 byte[][] 类型，如果
+     */
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = ShopCartConstant.SHOP_CART_SORT, key = "#userId", beforeInvocation = true),
+            @CacheEvict(value = ShopCartConstant.SHOP_CART_PAGE, key = "#userId", beforeInvocation = true)
+    })
+    public void remove(Long userId, Long... skuIds) {
+        hashOperations.delete(ShopCartConstant.getCartKey(userId), (Object) skuIds);
+        hashOperations.delete(ShopCartConstant.getGroupingKey(userId), (Object) skuIds);
+    }
+
+    /**
+     * 清空购物车。
+     * 将属于该用户的购物车数据全部删除。
+     *
+     * @param userId 用户ID
+     */
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = ShopCartConstant.SHOP_CART_SORT, key = "#userId", beforeInvocation = true),
+            @CacheEvict(value = ShopCartConstant.SHOP_CART_PAGE, key = "#userId", beforeInvocation = true)
+    })
+    public void clear(Long userId) {
+        redisTemplate.delete(ShopCartConstant.getCartKey(userId));
+        redisTemplate.delete(ShopCartConstant.getGroupingKey(userId));
+    }
+
+    @Override
+    public Integer into(Long userId) {
+        Long size = hashOperations.size(ShopCartConstant.getGroupingKey(userId));
+        return getTotalPage(size.intValue());
+    }
+
+    /**
+     * 获取购物车总页数
+     *
+     * @param totalSize
+     * @return
+     */
+    private Integer getTotalPage(Integer totalSize) {
+        return totalSize % ShopCartConstant.PAGE_SIZE == 0 ?
+                totalSize / ShopCartConstant.PAGE_SIZE :
+                totalSize / ShopCartConstant.PAGE_SIZE + 1;
+    }
+
+    /**
+     * `加入购物车`和`移出购物车`都检验 sku 是否`上架`
+     *
+     * @param skuId
+     */
+    private ShopCartSkuDTO checkSkuIfExists(Long skuId) {
+        // 校验 skuId 是否存在（保证数据库存在该sku，且该sku的状态为正常）
+        ShopCartSkuDTO shopCartSkuDTO = skuService.getShopCartSkuById(skuId);
+        if (!StatusEnum.NORMAL.getCode().equals(shopCartSkuDTO.getStatus())) {
+            throw new ValidateException(ResponseEnum.SKU_IS_OFF_THE_SHELVES);
+        }
+        return shopCartSkuDTO;
+    }
+
+    /**
+     * Redis 命令 `hgetall` 的时间复杂度为 O(n)，最坏的情况下为 O(120)，所以频繁使用会造成线上服务阻塞
+     * Redis 命令 `scan` 的时间复杂度为 O(1)，可以无阻塞的匹配出列表，缺点是可能出现重复数据，这里用 Map 接收
+     * 刚好可以解决这个问题，因为要求匹配的数据必须带顺序，所以在本方法中直接用 LinkedHashMap 来实现。
+     * Spring Data Redis 中的 scan 方法都帮我们维护了 Cursor 游标值了。
+     *
+     * @param key
+     * @return
+     */
+    private Map<Object, Object> scan(String key) {
+        Map<Object, Object> linkedHashMap = new LinkedHashMap<>();
+        // 设置 count 选项来指定每次迭代返回元素的最大值，设置 match 指定 field 需要匹配的 pattern
+        Cursor<Map.Entry<Object, Object>> cursor = hashOperations.scan(key,
+                ScanOptions.scanOptions().count(ShopCartConstant.ITEM_MAX).match("*").build());
+        // 带顺序的 HashMap，同一个元素就算被返回多次也不影响。
+        while (cursor.hasNext()) {
+            Map.Entry<Object, Object> entry = cursor.next();
+            linkedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        // 关闭游标，释放资源
+        cursor.close();
+        return linkedHashMap;
+    }
+
+    private ShopCartService proxy() {
+        return (ShopCartServiceImpl) AopContext.currentProxy();
+    }
+
+    private Long toLong(Object id) {
+        return id instanceof Long ?
+                (Long) id :
+                Long.valueOf(((Integer) id).longValue());
+    }
+}
