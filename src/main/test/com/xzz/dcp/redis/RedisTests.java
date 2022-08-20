@@ -1,6 +1,6 @@
 package com.xzz.dcp.redis;
 
-import com.xzz.dcp.ApplicationTests;
+import com.xzz.dcp.DCPApplicationTests;
 import com.xzz.dcp.common.constants.ShopCartConstant;
 import com.xzz.dcp.common.enums.StatusEnum;
 import com.xzz.dcp.dto.RedisTestDTO;
@@ -11,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * 执行完放可以输入 redis 命令 > object encoding [key] 来查看底层数据结构
  */
-public class RedisTests extends ApplicationTests {
+public class RedisTests extends DCPApplicationTests {
 
     @Autowired
     private RedisTemplate<String, Serializable> redisTemplate;
@@ -28,19 +27,20 @@ public class RedisTests extends ApplicationTests {
 
     @Before
     public void before() {
-        sku = new Sku()
-                .setItemId(111111L)
+        Date date = new Date();
+        sku = new Sku();
+        sku.setItemId(111111L)
                 .setShopId(123457L)
                 .setShopName("MiCai Shop")
                 .setItemName("帆布鞋")
-                .setPrice(15000L)
+                .setPrice(150F)
                 .setStock(100)
                 .setPicture("http://...pic...123.png")
                 .setProperties("白色;40")
                 .setMax(300)
                 .setStatus(StatusEnum.NORMAL.getCode())
-                .setCreateTime(LocalDateTime.now())
-                .setUpdateTime(LocalDateTime.now());
+                .setCreateTime(date)
+                .setUpdateTime(date);
 
         redisTestDTO = new RedisTestDTO()
                 .setSkuId(Long.MAX_VALUE)

@@ -1,6 +1,6 @@
-package com.xzz.dcp.common.exception;
+package com.xzz.dcp.service.ex;
 
-import com.xzz.dcp.common.enums.ShopCartResponseEnum;
+import com.xzz.dcp.common.enums.ResponseEnum;
 
 import javax.validation.ConstraintViolationException;
 
@@ -10,8 +10,8 @@ import javax.validation.ConstraintViolationException;
  */
 public class ValidateException extends ConstraintViolationException {
 
-    public ValidateException(ShopCartResponseEnum shopCartResponseEnum) {
-        super(shopCartResponseEnum.getMessage(), null);
+    public ValidateException(ResponseEnum responseEnum) {
+        super(responseEnum.getMessage(), null);
     }
 
 }

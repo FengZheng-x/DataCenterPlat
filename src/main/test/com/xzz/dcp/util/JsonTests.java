@@ -1,20 +1,21 @@
 package com.xzz.dcp.util;
 
-import com.xzz.dcp.ApplicationTests;
+import com.xzz.dcp.DCPApplicationTests;
 import com.xzz.dcp.common.enums.StatusEnum;
 import com.xzz.dcp.common.util.JsonUtil;
 import com.xzz.dcp.entity.Sku;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-public class JsonTests extends ApplicationTests {
+public class JsonTests extends DCPApplicationTests {
 
     private Sku sku;
 
     @Before
     public void before() {
+        Date date = new Date();
         sku = new Sku();
         sku.setItemId(111111L)
                 .setShopId(123457L)
@@ -26,8 +27,8 @@ public class JsonTests extends ApplicationTests {
                 .setProperties("白色;40")
                 .setMax(300)
                 .setStatus(StatusEnum.NORMAL.getCode())
-                .setCreateTime(LocalDateTime.now())
-                .setUpdateTime(LocalDateTime.now());
+                .setCreateTime(date)
+                .setUpdateTime(date);
     }
 
     @Test

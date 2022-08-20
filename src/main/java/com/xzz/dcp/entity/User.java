@@ -1,15 +1,20 @@
 package com.xzz.dcp.entity;
 
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@Entity
 @Accessors(chain = true)
-public class User extends TimeEntity {
+public class User extends TimeLogEntity {
     /**
      * 用户 ID
      */
@@ -66,5 +71,5 @@ public class User extends TimeEntity {
      * 0 已删除
      * 1 未被删除
      */
-    private Integer isDeleted;
+    private Integer isDelete;
 }

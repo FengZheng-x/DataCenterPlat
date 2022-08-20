@@ -4,29 +4,23 @@ DROP TABLE IF EXISTS t_user;
 
 CREATE TABLE t_user
 (
-    `userId`       INT AUTO_INCREMENT COMMENT '用户ID',
-    `username`     VARCHAR(20) NOT NULL UNIQUE COMMENT '用户名',
-    `phone`        VARCHAR(20) COMMENT '电话号码',
-    `salt`         CHAR(36)    NOT NULL COMMENT '盐值',
-    `email`        VARCHAR(30) COMMENT '电子邮箱',
-    `gender`       INT COMMENT '性别:0-女，1-男',
-    `avatar`       VARCHAR(50) COMMENT '头像',
-    `is_delete`    INT COMMENT '是否删除：0-未删除，1-已删除',
-    `created_time` DATETIME    NOT NULL COMMENT '日志-创建时间',
-    `mupdate_time` DATETIME    NOT NULL COMMENT '日志-最后修改时间',
+    `userId`      INT AUTO_INCREMENT COMMENT '用户ID',
+    `username`    VARCHAR(20) NOT NULL UNIQUE COMMENT '用户名',
+    `password`    VARCHAR(32) NOT NULL COMMENT '用户密码',
+    `phone`       VARCHAR(20) COMMENT '电话号码',
+    `salt`        CHAR(36)    NOT NULL COMMENT '盐值',
+    `email`       VARCHAR(30) COMMENT '电子邮箱',
+    `gender`      INT COMMENT '性别:0-女，1-男',
+    `avatar`      VARCHAR(50) COMMENT '头像',
+    `address`     VARCHAR(255) COMMENT '地址',
+    `is_delete`   INT COMMENT '是否删除：0-未删除，1-已删除',
+    `create_time` DATETIME    NOT NULL COMMENT '日志-创建时间',
+    `update_time` DATETIME    NOT NULL COMMENT '日志-最后修改时间',
     PRIMARY KEY (`userId`)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS t_psd;
-
-CREATE TABLE `t_psd`
-(
-    `userId`   INT AUTO_INCREMENT COMMENT '用户ID' PRIMARY KEY,
-    `password` VARCHAR(20) NOT NULL COMMENT '用户密码'
-);
-
-DROP TABLE IF EXISTS `sku`;
+DROP TABLE IF EXISTS `t_sku`;
 
 CREATE TABLE `t_sku`
 (

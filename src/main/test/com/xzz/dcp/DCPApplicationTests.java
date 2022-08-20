@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ApplicationTests {
+public class DCPApplicationTests {
     /**
      * 测试去重
      */

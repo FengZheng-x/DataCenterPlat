@@ -1,8 +1,8 @@
 package com.xzz.dcp.service.impl;
 
-import com.xzz.dcp.common.enums.ShopCartResponseEnum;
+import com.xzz.dcp.common.enums.ResponseEnum;
 import com.xzz.dcp.common.enums.StatusEnum;
-import com.xzz.dcp.common.exception.ValidateException;
+import com.xzz.dcp.service.ex.ValidateException;
 import com.xzz.dcp.dto.ShopCartSkuDTO;
 import com.xzz.dcp.entity.Sku;
 import com.xzz.dcp.repository.SkuRepository;
@@ -34,7 +34,7 @@ public class SkuServiceImpl implements ISkuService {
     @Cacheable(cacheNames = "entity:sku", key = "#id")
     public Sku getById(Long id) {
         return Optional.ofNullable(skuRepository.findByIdAndStatusIsNot(id, StatusEnum.DELETED.getCode()))
-                .orElseThrow(() -> new ValidateException(ShopCartResponseEnum.SKU_IS_NOT_EXISTS));
+                .orElseThrow(() -> new ValidateException(ResponseEnum.SKU_IS_NOT_EXISTS));
     }
 
     /**

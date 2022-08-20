@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace 用于指定当前的映射文件和哪个接口进行映射，需要指定接口的文件路径，路径需要是包的完整路径结构  -->
+<mapper namespace="com.xzz.dcp.mapper.UserMapper">
+    <!--  自定义映射规则  -->
+    <resultMap id="UserEntityMap" type="com.xzz.dcp.entity.User">
+        <!--
+            column 属性表示表中的资源名称
+            property 属性表示类中的资源名称
+            主键不可省略
+        -->
+        <id column="uid" property="uid"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!--
+        id 属性表示映射的接口中方法的名称
+        useGeneratedKeys 属性表示某个字段值递增
+        keyProperty 属性表示进行递增的主键
+    -->
+    <insert id="insert">
+        INSERT INTO t_user(`username`,
+                           `password`,
+                           `salt`,
+                           `phone`,
+                           `email`,
+                           `gender`,
+                           `avatar`,
+                           `address`,
+                           `is_delete`,
+                           `create_time`,
+                           `update_time`)
+        VALUES (#{username},
+                #{password},
+                #{salt},
+                #{phone},
+                #{email},
+                #{gender},
+                #{avatar},
+                #{address},
+                #{isDelete},
+                #{createTime},
+                #{updateTime})
+    </insert>
+
+    <!--
+        resultType 属性表示查询的结果集类型，要求字段名相同 (is_delete != isDelete)
+        resultMap 属性表示表的资源和类的对象字段名称不同
+    -->
+    <select id="findByUsername" resultMap="UserEntityMap">
+        SELECT *
+        FROM t_user
+        WHERE username = #{username}
+    </select>
+</mapper>

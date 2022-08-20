@@ -36,3 +36,6 @@ spring:
     # 一般来说是不用配置的，Spring Cache 会根据依赖的包自行装配
   cache:
     type: redis
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml    # mapper 映射文件位置

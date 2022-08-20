@@ -1,15 +1,14 @@
-package com.xzz.dcp.service.impl;
+package com.xzz.dcp.service;
 
-import com.xzz.dcp.ApplicationTests;
+import com.xzz.dcp.DCPApplicationTests;
 import com.xzz.dcp.common.util.JsonUtil;
 import com.xzz.dcp.dto.ShopCartDTO;
-import com.xzz.dcp.service.IShopCartService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class ShopCartServiceImplTest extends ApplicationTests {
+public class ShopCartServiceImplTest extends DCPApplicationTests {
 
     private final Long userId = 999999L;
 

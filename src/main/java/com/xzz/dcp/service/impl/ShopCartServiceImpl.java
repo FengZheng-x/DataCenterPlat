@@ -1,14 +1,14 @@
 package com.xzz.dcp.service.impl;
 
 import com.xzz.dcp.common.constants.ShopCartConstant;
-import com.xzz.dcp.common.enums.ShopCartResponseEnum;
+import com.xzz.dcp.common.enums.ResponseEnum;
 import com.xzz.dcp.common.enums.StatusEnum;
-import com.xzz.dcp.common.exception.ValidateException;
 import com.xzz.dcp.dto.ShopCartDTO;
 import com.xzz.dcp.dto.ShopCartItemDTO;
 import com.xzz.dcp.dto.ShopCartSkuDTO;
 import com.xzz.dcp.service.IShopCartService;
 import com.xzz.dcp.service.ISkuService;
+import com.xzz.dcp.service.ex.ValidateException;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -66,7 +66,7 @@ public class ShopCartServiceImpl implements IShopCartService {
         Integer value = (Integer) hashOperations.get(ShopCartConstant.getCartKey(userId), skuId);
         if (ObjectUtils.isEmpty(value)) {
             if (hashOperations.size(ShopCartConstant.getCartKey(userId)) >= ShopCartConstant.TYPE_MAX) {
-                throw new ValidateException(ShopCartResponseEnum.SHOP_CART_SKU_TYPE_COUNT_FULL);
+                throw new ValidateException(ResponseEnum.SHOP_CART_SKU_TYPE_COUNT_FULL);
             }
             hashOperations.put(ShopCartConstant.getGroupingKey(userId), skuId, shopCartSkuDTO.getShopId());
         }
@@ -237,7 +237,7 @@ public class ShopCartServiceImpl implements IShopCartService {
         try {
             ShopCartSkuDTO shopCartSkuDTO = skuService.getShopCartSkuById(skuId);
             if (!StatusEnum.NORMAL.getCode().equals(shopCartSkuDTO.getStatus())) {
-                throw new ValidateException(ShopCartResponseEnum.SKU_IS_OFF_THE_SHELVES);
+                throw new ValidateException(ResponseEnum.SKU_IS_OFF_THE_SHELVES);
             }
             return shopCartSkuDTO;
         } catch (ValidateException ignored) {

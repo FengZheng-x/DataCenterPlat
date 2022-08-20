@@ -23,7 +23,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Accessors(chain = true)
-public class Sku extends TimeEntity {
+public class Sku extends TimeLogEntity {
 
     /**
      * skuID
