@@ -1,7 +1,9 @@
 package com.xzz.dcp.mapper;
 
 import com.xzz.dcp.entity.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserMapper {
     /**
      * 插入用户的数据
