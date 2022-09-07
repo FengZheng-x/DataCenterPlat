@@ -41,7 +41,7 @@ public class SkuRepositoryTest extends DCPApplicationTests {
 
     @Test
     public void findByIdAndStatusIsNotTEst() {
-        Sku sku = skuRepository.findByIdAndStatusIsNot(5L, StatusEnum.DELETED.getCode());
+        Sku sku = skuRepository.findBySkuIdAndStatusIsNot(5L, StatusEnum.DELETED.getCode());
         System.out.println(sku);
     }
 

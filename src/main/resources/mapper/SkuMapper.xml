@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace 用于指定当前的映射文件和哪个接口进行映射，需要指定接口的文件路径，路径需要是包的完整路径结构  -->
+<mapper namespace="com.xzz.dcp.mapper.SkuMapper">
+    <resultMap id="SkuRntityMap" type="com.xzz.dcp.entity.Sku">
+        <id column="uid" property="uid"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO t_sku(`item_id`,
+                          `item_name`,
+                          `max`,
+                          `price`,
+                          `properties`,
+                          `shop_id`,
+                          `shop_name`,
+                          `status`,
+                          `stock`,
+                          `create_time`,
+                          `update_time`)
+        VALUES (#{item_id},
+                #{item_name#},
+                #{max},
+                #{price},
+                #{properties},
+                #{shop_id},
+                #{shop_name},
+                #{status},
+                #{stock},
+                #{create_time},
+                #{update_time})
+    </insert>
+
+    <select id="findBySkuId" resultMap="SkuEntiryMap">
+        SELECT *
+        FROM t_sku
+        WHERE skuId = #{sku_id};
+    </select>
+</mapper>

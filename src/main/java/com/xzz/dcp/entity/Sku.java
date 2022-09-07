@@ -24,18 +24,22 @@ import java.util.Objects;
 @Entity
 @Accessors(chain = true)
 public class Sku extends TimeLogEntity {
-
     /**
      * skuID
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // 这里为了方便，用自增
-    private Long id;
+    private Long skuId;
 
     /**
      * 商品ID
      */
     private Long itemId;
+
+    /**
+     * 商品名称（冗余字段）
+     */
+    private String itemName;
 
     /**
      * 店铺ID
@@ -46,11 +50,6 @@ public class Sku extends TimeLogEntity {
      * 店铺名称（冗余字段）
      */
     private String shopName;
-
-    /**
-     * 商品名称（冗余字段）
-     */
-    private String itemName;
 
     /**
      * sku单价（单位：元）
@@ -93,7 +92,7 @@ public class Sku extends TimeLogEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         Sku sku = (Sku) o;
-        return id != null && Objects.equals(id, sku.id);
+        return skuId != null && Objects.equals(skuId, sku.skuId);
     }
 
     @Override

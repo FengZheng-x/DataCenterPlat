@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace 用于指定当前的映射文件和哪个接口进行映射，需要指定接口的文件路径，路径需要是包的完整路径结构  -->
+<mapper namespace="com.xzz.dcp.mapper.OrderMapper">
+    <resultMap id="OrderEntityMap" type="com.xzz.dcp.entity.Order">
+        <id column="uid" property="uid"/>
+        <result column="payment_type" property="paymentType"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO t_order(`code`,
+                            `type`,
+                            `amount`,
+                            `payment_type`,
+                            `status`,
+                            `postage`,
+                            `weight`,
+                            `create_time`,
+                            `update_time`)
+        VALUES (#{code},
+                #{type},
+                #{amount},
+                #{payment_type},
+                #{status},
+                #{postage},
+                #{weight},
+                #{create_time},
+                #{update_time});
+    </insert>
+
+    <select id="findByCode" resultMap="OrderEntityMap">
+        SELECT *
+        FROM t_order
+        WHERE code = #{code};
+    </select>
+</mapper>

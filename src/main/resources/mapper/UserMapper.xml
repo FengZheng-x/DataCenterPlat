@@ -44,7 +44,7 @@
                 #{address},
                 #{isDelete},
                 #{createTime},
-                #{updateTime})
+                #{updateTime});
     </insert>
 
     <!--
@@ -54,6 +54,6 @@
     <select id="findByUsername" resultMap="UserEntityMap">
         SELECT *
         FROM t_user
-        WHERE username = #{username}
+        WHERE username = #{username};
     </select>
 </mapper>

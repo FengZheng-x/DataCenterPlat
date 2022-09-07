@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  namespace 用于指定当前的映射文件和哪个接口进行映射，需要指定接口的文件路径，路径需要是包的完整路径结构  -->
+<mapper namespace="com.xzz.dcp.mapper.ShopCartMapper">
+    <resultMap id="ShopCartEntityMap" type="com.xzz.dcp.entity.ShopCart">
+        <id column="uid" property="uid"/>
+        <result column="user_id" property="userId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO t_shop_cart(`user_id`,
+                                `sku_id`,
+                                `count`,
+                                `create_time`,
+                                `update_time`,
+                                `selected`)
+        VALUES (#{user_id},
+                #{sku_id},
+                #{count},
+                #{create_time},
+                #{update_time},
+                #{selected})
+    </insert>
+
+    <select id="findByUsername" resultMap="ShopCartEntityMap">
+        SELECT *
+        FROM t_shop_cart
+        WHERE userId = #{user_id};
+    </select>
+</mapper>

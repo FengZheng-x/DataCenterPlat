@@ -33,7 +33,7 @@ public class SkuServiceImpl implements ISkuService {
     @Override
     @Cacheable(cacheNames = "entity:sku", key = "#id")
     public Sku getById(Long id) {
-        return Optional.ofNullable(skuRepository.findByIdAndStatusIsNot(id, StatusEnum.DELETED.getCode()))
+        return Optional.ofNullable(skuRepository.findBySkuIdAndStatusIsNot(id, StatusEnum.DELETED.getCode()))
                 .orElseThrow(() -> new ValidateException(ResponseEnum.SKU_IS_NOT_EXISTS));
     }
 

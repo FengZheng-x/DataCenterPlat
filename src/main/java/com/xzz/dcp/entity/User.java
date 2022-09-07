@@ -20,7 +20,7 @@ public class User extends TimeLogEntity {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Long userId;
 
     /**
      * 用户名称
